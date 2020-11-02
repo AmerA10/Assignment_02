@@ -9,8 +9,14 @@ public class SLL <Avenger extends Comparable<Avenger>> {
 	
 	
 	
-	private Comparator comparator;
+	private Comparator<Avenger> comparator;
 	
+	
+	
+	 /**
+	  * Constructor
+	  * This is the constructor where there is comparator given and no avenger list given
+	  */
 	public SLL () {
 		size = 0;
 		head = null;
@@ -19,8 +25,11 @@ public class SLL <Avenger extends Comparable<Avenger>> {
 	}
 	
 	
-	
-	public SLL(Comparator comparator) {
+	/**
+	 * Constructor for where a custom comparator is given
+	 * @param comparator
+	 */
+	public SLL(Comparator<Avenger> comparator) {
 		head = null;
 		tail = null;
 		size = 0;
@@ -28,43 +37,73 @@ public class SLL <Avenger extends Comparable<Avenger>> {
 		
 	}
 	
+	/**
+	 * receives node n and adds it to the head
+	 * @param n
+	 */
 	public void addHead(Node<Avenger> n) {
 		
 		if (head == null) {
 			head = n;
 			tail = n;
+			size++;
 		}
 		else {
 			n.setNext(head);
 			head = n;
-			
+			size++;
 		}
 		
 	}
 	
+	/**
+	 * adds every node to the end of the list
+	 * @param n
+	 */
 	
-	//adds every node to the end of the list
 	public void add(Node<Avenger> n ) {
 		if (tail == null) {
 			head = n;
 			tail = n;
+			size++;
 		}
 		else {
 			tail.setNext(n);
 			tail = n;
+			size++;
 		}
 	}
 	
 	
-	//i dont know if the prof wants us to delete a node based off the avenger or based on the index given
-	public void delete(Node<Avenger> n) {
+	/**
+	 * Removes node n by receiving data to remove
+	 * @param n
+	 */
+	public void delete(Avenger av) {
 		
 		Node<Avenger> curr = head;
 		Node<Avenger> prev = head;
 		
 		while(curr.getNext() != null) {
-			if (curr.getData().equals(n.getData())) {
+			if (curr.getData().equals(av)) {
+				size--;
+				if (head == tail) {
+					head = null;
+					tail = null;
+					return;
+				}
+
+				if (curr == head)
+					head = curr.getNext();
+				else {
 				
+					prev.setNext(curr.getNext());
+				}
+				if (curr == tail) {
+					tail = prev;
+				}
+
+				return;
 			}
 			else {
 				prev = curr;
@@ -74,14 +113,18 @@ public class SLL <Avenger extends Comparable<Avenger>> {
 	
 	}
 	
-	//this probably needs changing
-	 //I dont know if the prof wants us to find it by index or by avenger name or alias
-	public Node<Avenger> find (Node<Avenger> n){
+	/**
+	 * receives avenger information and returns the corresponding Node
+	 * @param av
+	 * @return 
+	 * returns the node of the avenger found
+	 */
+	public Node<Avenger> find (Avenger av){
 		
 		Node<Avenger> temp = head;
 		
 		while(temp.getNext() != null) {
-			if (temp.getData().equals(n.getData())) {
+			if (temp.getData().equals(av)) {
 				return temp;
 			}
 			else {
@@ -93,9 +136,11 @@ public class SLL <Avenger extends Comparable<Avenger>> {
 	}
 	
 	
-	//if we are to add an avenger in the order what is the order?
-	//it is the order that is dictated by the comparator or comparable 
-	//meaning the node placement will be dependent on the result
+	/**
+	 * Receives a n node and adds in the order of either the default comparator or the 
+	 * Custom comparator
+	 * @param n
+	 */
 	public void addInOrder(Node<Avenger> n) {
 		if (head == null || compare(n, head) <= 0 ) {
 			addHead(n);
@@ -111,11 +156,18 @@ public class SLL <Avenger extends Comparable<Avenger>> {
 			}
 			n.setNext(temp.getNext());
 			temp.setNext(n);
+			size++;
 		}
 	}
 	
-	//"Comparator isnt null so using comparator method of sorting");
-	//"comparator is null, using internal data method of sorting");
+	/**
+	 * 
+	 * @param a1
+	 * @param a2
+	 * @return
+	 * returns the order of comparing two avenger nodes
+	 * this is done either using the default avenger comparator or the custom
+	 */
 	private int compare(Node<Avenger>a1, Node<Avenger> a2) {
 		
 		if(comparator == null) {
@@ -131,6 +183,10 @@ public class SLL <Avenger extends Comparable<Avenger>> {
 		return 0;
 	}
 
+	/**
+	 * returns size of Linked List Structure
+	 * @return
+	 */
 	public int getSize() {
 		
 		return size;
